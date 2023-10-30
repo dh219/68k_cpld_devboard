@@ -1,6 +1,6 @@
 {
   "board": {
-    "active_layer": 0,
+    "active_layer": 37,
     "active_layer_preset": "",
     "auto_track_width": true,
     "hidden_nets": [],
@@ -62,7 +62,7 @@
       35,
       36
     ],
-    "visible_layers": "003fff0_80000001",
+    "visible_layers": "00010fc_80000001",
     "zone_display_mode": 0
   },
   "meta": {
@@ -77,10 +77,22 @@
         "window": {
           "display": 0,
           "maximized": false,
-          "pos_x": 0,
-          "pos_y": 22,
+          "pos_x": 19,
+          "pos_y": 0,
           "size_x": 1337,
           "size_y": 952
+        }
+      },
+      {
+        "name": "68k_breakout_3v3.kicad_sch",
+        "open": false,
+        "window": {
+          "display": 0,
+          "maximized": false,
+          "pos_x": 107,
+          "pos_y": 72,
+          "size_x": 1360,
+          "size_y": 871
         }
       }
     ]
