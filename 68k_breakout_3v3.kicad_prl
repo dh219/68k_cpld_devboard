@@ -1,6 +1,6 @@
 {
   "board": {
-    "active_layer": 36,
+    "active_layer": 31,
     "active_layer_preset": "",
     "auto_track_width": true,
     "hidden_nets": [],
@@ -77,7 +77,7 @@
         "window": {
           "display": 0,
           "maximized": false,
-          "pos_x": 19,
+          "pos_x": 115,
           "pos_y": 0,
           "size_x": 1337,
           "size_y": 952
@@ -89,8 +89,8 @@
         "window": {
           "display": 0,
           "maximized": false,
-          "pos_x": 79,
-          "pos_y": 94,
+          "pos_x": 75,
+          "pos_y": 43,
           "size_x": 1360,
           "size_y": 871
         }

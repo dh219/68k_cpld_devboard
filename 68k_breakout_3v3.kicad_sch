@@ -4537,7 +4537,7 @@
     (uuid 00000000-0000-0000-0000-000062c3d0cb)
     (property "Reference" "J2" (id 0) (at 318.77 224.9932 0))
     (property "Value" "Conn_02x02_Odd_Even" (id 1) (at 318.77 227.3046 0))
-    (property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_2x02_P2.54mm_Vertical" (id 2) (at 317.5 230.505 0)
+    (property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_2x02_P2.54mm_Vertical" (id 2) (at 317.5 230.505 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (id 3) (at 317.5 230.505 0)
@@ -4980,7 +4980,7 @@
     (uuid 57070c29-5005-4fdc-8062-b165957e0bf6)
     (property "Reference" "J1" (id 0) (at 341.63 224.9932 0))
     (property "Value" "Conn_02x02_Odd_Even" (id 1) (at 341.63 227.3046 0))
-    (property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_2x02_P2.54mm_Vertical" (id 2) (at 340.36 230.505 0)
+    (property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_2x02_P2.54mm_Vertical" (id 2) (at 340.36 230.505 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (id 3) (at 340.36 230.505 0)
@@ -6064,10 +6064,10 @@
       (reference "IC8") (unit 1) (value "SN74CB3T3245DW") (footprint "Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm")
     )
     (path "/57070c29-5005-4fdc-8062-b165957e0bf6"
-      (reference "J1") (unit 1) (value "Conn_02x02_Odd_Even") (footprint "Connector_PinSocket_2.54mm:PinSocket_2x02_P2.54mm_Vertical")
+      (reference "J1") (unit 1) (value "Conn_02x02_Odd_Even") (footprint "Connector_PinHeader_2.54mm:PinHeader_2x02_P2.54mm_Vertical")
     )
     (path "/00000000-0000-0000-0000-000062c3d0cb"
-      (reference "J2") (unit 1) (value "Conn_02x02_Odd_Even") (footprint "Connector_PinSocket_2.54mm:PinSocket_2x02_P2.54mm_Vertical")
+      (reference "J2") (unit 1) (value "Conn_02x02_Odd_Even") (footprint "Connector_PinHeader_2.54mm:PinHeader_2x02_P2.54mm_Vertical")
     )
     (path "/68661299-5104-4868-aadf-f82ed2983f63"
       (reference "J3") (unit 1) (value "Conn_02x20_Odd_Even") (footprint "Connector_PinHeader_2.54mm:PinHeader_2x20_P2.54mm_Vertical")
