@@ -1,6 +1,6 @@
 {
   "board": {
-    "active_layer": 37,
+    "active_layer": 36,
     "active_layer_preset": "",
     "auto_track_width": true,
     "hidden_nets": [],
@@ -63,7 +63,7 @@
       36
     ],
     "visible_layers": "00010fc_80000001",
-    "zone_display_mode": 0
+    "zone_display_mode": 1
   },
   "meta": {
     "filename": "68k_breakout_3v3.kicad_prl",
@@ -89,8 +89,8 @@
         "window": {
           "display": 0,
           "maximized": false,
-          "pos_x": 107,
-          "pos_y": 72,
+          "pos_x": 440,
+          "pos_y": 329,
           "size_x": 1360,
           "size_y": 871
         }
