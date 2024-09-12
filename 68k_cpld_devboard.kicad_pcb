@@ -7356,7 +7356,7 @@
 		(uuid "ed66ec3b-7d22-4368-aefe-866a71655f99")
 	)
 	(gr_text "Copyright 2024 D Henderson\ngithub.com/dh219"
-		(at 31.75 75.335 0)
+		(at 77.978 55.372 0)
 		(layer "F.SilkS")
 		(uuid "0bf25f52-a693-40da-9f75-1a4971320dda")
 		(effects
@@ -7381,13 +7381,14 @@
 		)
 	)
 	(gr_text "~{68k CPLD DEVBOARD}"
-		(at 45.72 72.39 0)
+		(at 88.138 52.832 0)
 		(layer "F.SilkS")
 		(uuid "55b854a6-8587-4401-be56-3bea18197cbc")
 		(effects
 			(font
-				(size 2.2 1.8)
-				(thickness 0.4)
+				(size 1.6 1.3)
+				(thickness 0.3)
+				(bold yes)
 				(italic yes)
 			)
 		)
