@@ -1,0 +1,96 @@
+NET	CLK	LOC = "22";
+		
+NET	RESET	LOC = "12";
+NET	HALT	LOC = "13";
+
+NET	BR	LOC = "14";
+NET	BG	LOC = "16";
+NET	BGACK	LOC = "15";
+		
+NET	FC<0>	LOC = "1";
+NET	FC<1>	LOC = "2";
+NET	FC<2>	LOC = "3";
+		
+NET	RW	LOC = "18";
+NET	AS	LOC = "23";
+NET	LDS	LOC = "19";
+NET	UDS	LOC = "20";
+NET	DTACK	LOC = "17";
+NET	BERR	LOC = "8";
+		
+NET	IPL<0>	LOC = "4";
+NET	IPL<1>	LOC = "6";
+NET	IPL<2>	LOC = "7";
+		
+NET	VPA	LOC = "9";
+NET	VMA	LOC = "11";
+NET	E	LOC = "10";
+
+NET	TP1	LOC = "74";
+		
+NET	P50	LOC = "50";
+		
+NET	P52	LOC = "52";
+NET	P53	LOC = "53";
+NET	P54	LOC = "54";
+NET	P55	LOC = "55";
+NET	P56	LOC = "56";
+		
+NET	P58	LOC = "58";
+NET	P59	LOC = "59";
+NET	P60	LOC = "60";
+NET	P61	LOC = "61";
+		
+NET	P63	LOC = "63";
+NET	P64	LOC = "64";
+NET	P65	LOC = "65";
+NET	P66	LOC = "66";
+NET	P67	LOC = "67";
+NET	P68	LOC = "68";
+		
+NET	P70	LOC = "70";
+NET	P71	LOC = "71";
+NET	P72	LOC = "72";
+NET	P73	LOC = "73";
+		
+		
+NET	A<1>	LOC = "99";
+NET	A<2>	LOC = "97";
+NET	A<3>	LOC = "96";
+NET	A<4>	LOC = "95";
+NET	A<5>	LOC = "76";
+NET	A<6>	LOC = "77";
+NET	A<7>	LOC = "78";
+NET	A<8>	LOC = "79";
+NET	A<9>	LOC = "80";
+NET	A<10>	LOC = "81";
+NET	A<11>	LOC = "82";
+NET	A<12>	LOC = "85";
+NET	A<13>	LOC = "86";
+NET	A<14>	LOC = "87";
+NET	A<15>	LOC = "89";
+NET	A<16>	LOC = "90";
+NET	A<17>	LOC = "91";
+NET	A<18>	LOC = "92";
+NET	A<19>	LOC = "93";
+NET	A<20>	LOC = "94";
+NET	A<21>	LOC = "30";
+NET	A<22>	LOC = "32";
+NET	A<23>	LOC = "33";
+		
+NET	D<0>	LOC = "24";
+NET	D<1>	LOC = "25";
+NET	D<2>	LOC = "27";
+NET	D<3>	LOC = "28";
+NET	D<4>	LOC = "29";
+NET	D<5>	LOC = "49";
+NET	D<6>	LOC = "46";
+NET	D<7>	LOC = "43";
+NET	D<8>	LOC = "42";
+NET	D<9>	LOC = "41";
+NET	D<10>	LOC = "40";
+NET	D<11>	LOC = "39";
+NET	D<12>	LOC = "37";
+NET	D<13>	LOC = "36";
+NET	D<14>	LOC = "35";
+NET	D<15>	LOC = "34";

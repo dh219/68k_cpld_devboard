@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<generated_project xmlns="http://www.xilinx.com/XMLSchema" xmlns:xil_pn="http://www.xilinx.com/XMLSchema">
+
+  <!--                                                          -->
+
+  <!--             For tool use only. Do not edit.              -->
+
+  <!--                                                          -->
+
+  <!-- ProjectNavigator created generated project file.         -->
+
+  <!-- For use in tracking generated file and other information -->
+
+  <!-- allowing preservation of process status.                 -->
+
+  <!--                                                          -->
+
+  <!-- Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved. -->
+
+  <version xmlns="http://www.xilinx.com/XMLSchema">11.1</version>
+
+  <sourceproject xmlns="http://www.xilinx.com/XMLSchema" xil_pn:fileType="FILE_XISE" xil_pn:name="gotek_led.xise"/>
+
+  <files xmlns="http://www.xilinx.com/XMLSchema">
+    <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="_ngo"/>
+    <file xil_pn:fileType="FILE_XMSGS" xil_pn:name="_xmsgs/ngdbuild.xmsgs"/>
+    <file xil_pn:fileType="FILE_XMSGS" xil_pn:name="_xmsgs/xst.xmsgs"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_NGDBUILD_LOG" xil_pn:name="gotek_led.bld"/>
+    <file xil_pn:fileType="FILE_CMD_LOG" xil_pn:name="gotek_led.cmd_log"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_GYD" xil_pn:name="gotek_led.gyd"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_JEDEC" xil_pn:name="gotek_led.jed"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_LSO" xil_pn:name="gotek_led.lso"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_MFD" xil_pn:name="gotek_led.mfd"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_NGA" xil_pn:name="gotek_led.nga"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_NGC" xil_pn:name="gotek_led.ngc"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_NGD" xil_pn:name="gotek_led.ngd"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_NGR" xil_pn:name="gotek_led.ngr"/>
+    <file xil_pn:fileType="FILE_PAD_MISC" xil_pn:name="gotek_led.pad"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_PNX" xil_pn:name="gotek_led.pnx"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="gotek_led.prj"/>
+    <file xil_pn:fileType="FILE_FITTER_REPORT" xil_pn:name="gotek_led.rpt"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST_STX" xil_pn:name="gotek_led.stx"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST_REPORT" xil_pn:name="gotek_led.syr"/>
+    <file xil_pn:fileType="FILE_FITTER_REPORT" xil_pn:name="gotek_led.tim"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_VM6" xil_pn:name="gotek_led.vm6"/>
+    <file xil_pn:fileType="FILE_FITTER_REPORT" xil_pn:name="gotek_led.xml"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST" xil_pn:name="gotek_led.xst"/>
+    <file xil_pn:fileType="FILE_FITTER_REPORT" xil_pn:name="gotek_led_build.xml"/>
+    <file xil_pn:fileType="FILE_HTML" xil_pn:name="gotek_led_envsettings.html"/>
+    <file xil_pn:fileType="FILE_XRPT" xil_pn:name="gotek_led_ngdbuild.xrpt"/>
+    <file xil_pn:fileType="FILE_PAD_EXCEL_REPORT" xil_pn:name="gotek_led_pad.csv"/>
+    <file xil_pn:fileType="FILE_HTML" xil_pn:name="gotek_led_summary.html"/>
+    <file xil_pn:fileType="FILE_XRPT" xil_pn:name="gotek_led_xst.xrpt"/>
+    <file xil_pn:fileType="FILE_FITTER_REPORT" xil_pn:name="webtalk_pn.xml"/>
+    <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="xlnx_auto_0_xdb"/>
+    <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="xst"/>
+  </files>
+
+  <transforms xmlns="http://www.xilinx.com/XMLSchema">
+    <transform xil_pn:end_ts="1728252462" xil_pn:name="TRAN_copyInitialToXSTAbstractSynthesis" xil_pn:start_ts="1728252462">
+      <status xil_pn:value="SuccessfullyRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1728252462" xil_pn:name="TRAN_schematicsToHdl" xil_pn:prop_ck="-5731290056968894443" xil_pn:start_ts="1728252462">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1728339147" xil_pn:in_ck="163071900150066322" xil_pn:name="TRANEXT_xstsynthesize_xc9500xl" xil_pn:prop_ck="6031894324582289737" xil_pn:start_ts="1728339142">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="WarningsGenerated"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForInputs"/>
+      <status xil_pn:value="InputAdded"/>
+      <outfile xil_pn:name="_xmsgs/xst.xmsgs"/>
+      <outfile xil_pn:name="gotek_led.lso"/>
+      <outfile xil_pn:name="gotek_led.ngc"/>
+      <outfile xil_pn:name="gotek_led.ngr"/>
+      <outfile xil_pn:name="gotek_led.prj"/>
+      <outfile xil_pn:name="gotek_led.stx"/>
+      <outfile xil_pn:name="gotek_led.syr"/>
+      <outfile xil_pn:name="gotek_led.xst"/>
+      <outfile xil_pn:name="gotek_led_xst.xrpt"/>
+      <outfile xil_pn:name="webtalk_pn.xml"/>
+      <outfile xil_pn:name="xst"/>
+    </transform>
+    <transform xil_pn:end_ts="1728252468" xil_pn:in_ck="-6882141473673289222" xil_pn:name="TRAN_compileBCD2" xil_pn:prop_ck="-8119205273337885584" xil_pn:start_ts="1728252468">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1728339151" xil_pn:in_ck="6631542391577226030" xil_pn:name="TRAN_ngdbuild" xil_pn:prop_ck="1893441463969615248" xil_pn:start_ts="1728339147">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
+      <outfile xil_pn:name="_ngo"/>
+      <outfile xil_pn:name="_xmsgs/ngdbuild.xmsgs"/>
+      <outfile xil_pn:name="gotek_led.bld"/>
+      <outfile xil_pn:name="gotek_led.ngd"/>
+      <outfile xil_pn:name="gotek_led_ngdbuild.xrpt"/>
+    </transform>
+    <transform xil_pn:end_ts="1728339154" xil_pn:in_ck="-6882141473673296715" xil_pn:name="TRANEXT_vm6File_xc9500xl" xil_pn:prop_ck="-8953335223726995401" xil_pn:start_ts="1728339151">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="WarningsGenerated"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
+      <outfile xil_pn:name="gotek_led.gyd"/>
+      <outfile xil_pn:name="gotek_led.mfd"/>
+      <outfile xil_pn:name="gotek_led.nga"/>
+      <outfile xil_pn:name="gotek_led.pad"/>
+      <outfile xil_pn:name="gotek_led.pnx"/>
+      <outfile xil_pn:name="gotek_led.rpt"/>
+      <outfile xil_pn:name="gotek_led.tim"/>
+      <outfile xil_pn:name="gotek_led.vm6"/>
+      <outfile xil_pn:name="gotek_led.xml"/>
+      <outfile xil_pn:name="gotek_led_build.xml"/>
+      <outfile xil_pn:name="gotek_led_pad.csv"/>
+    </transform>
+    <transform xil_pn:end_ts="1728339155" xil_pn:in_ck="-6882141473673287851" xil_pn:name="TRANEXT_crtProg_xc9500" xil_pn:prop_ck="-6294026017969277533" xil_pn:start_ts="1728339154">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
+      <outfile xil_pn:name="gotek_led.jed"/>
+    </transform>
+    <transform xil_pn:end_ts="1728252477" xil_pn:in_ck="-6882141473673287851" xil_pn:name="TRAN_timRpt" xil_pn:prop_ck="111903974446" xil_pn:start_ts="1728252476">
+      <status xil_pn:value="AbortedRun"/>
+      <status xil_pn:value="WarningsGenerated"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForInputs"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
+      <status xil_pn:value="InputChanged"/>
+    </transform>
+  </transforms>
+
+</generated_project>
