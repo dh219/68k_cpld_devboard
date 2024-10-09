@@ -64,12 +64,10 @@
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
     </transform>
-    <transform xil_pn:end_ts="1728339147" xil_pn:in_ck="163071900150066322" xil_pn:name="TRANEXT_xstsynthesize_xc9500xl" xil_pn:prop_ck="6031894324582289737" xil_pn:start_ts="1728339142">
+    <transform xil_pn:end_ts="1728340930" xil_pn:in_ck="3303544449783206057" xil_pn:name="TRANEXT_xstsynthesize_xc9500xl" xil_pn:prop_ck="6031894324582289737" xil_pn:start_ts="1728340924">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
-      <status xil_pn:value="OutOfDateForInputs"/>
-      <status xil_pn:value="InputAdded"/>
       <outfile xil_pn:name="_xmsgs/xst.xmsgs"/>
       <outfile xil_pn:name="gotek_led.lso"/>
       <outfile xil_pn:name="gotek_led.ngc"/>
@@ -86,21 +84,19 @@
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
     </transform>
-    <transform xil_pn:end_ts="1728339151" xil_pn:in_ck="6631542391577226030" xil_pn:name="TRAN_ngdbuild" xil_pn:prop_ck="1893441463969615248" xil_pn:start_ts="1728339147">
+    <transform xil_pn:end_ts="1728340935" xil_pn:in_ck="6631542391577226030" xil_pn:name="TRAN_ngdbuild" xil_pn:prop_ck="1893441463969615248" xil_pn:start_ts="1728340930">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
-      <status xil_pn:value="OutOfDateForPredecessor"/>
       <outfile xil_pn:name="_ngo"/>
       <outfile xil_pn:name="_xmsgs/ngdbuild.xmsgs"/>
       <outfile xil_pn:name="gotek_led.bld"/>
       <outfile xil_pn:name="gotek_led.ngd"/>
       <outfile xil_pn:name="gotek_led_ngdbuild.xrpt"/>
     </transform>
-    <transform xil_pn:end_ts="1728339154" xil_pn:in_ck="-6882141473673296715" xil_pn:name="TRANEXT_vm6File_xc9500xl" xil_pn:prop_ck="-8953335223726995401" xil_pn:start_ts="1728339151">
+    <transform xil_pn:end_ts="1728340941" xil_pn:in_ck="-6882141473673296715" xil_pn:name="TRANEXT_vm6File_xc9500xl" xil_pn:prop_ck="-8953335223726995401" xil_pn:start_ts="1728340935">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
-      <status xil_pn:value="OutOfDateForPredecessor"/>
       <outfile xil_pn:name="gotek_led.gyd"/>
       <outfile xil_pn:name="gotek_led.mfd"/>
       <outfile xil_pn:name="gotek_led.nga"/>
@@ -113,10 +109,9 @@
       <outfile xil_pn:name="gotek_led_build.xml"/>
       <outfile xil_pn:name="gotek_led_pad.csv"/>
     </transform>
-    <transform xil_pn:end_ts="1728339155" xil_pn:in_ck="-6882141473673287851" xil_pn:name="TRANEXT_crtProg_xc9500" xil_pn:prop_ck="-6294026017969277533" xil_pn:start_ts="1728339154">
+    <transform xil_pn:end_ts="1728340942" xil_pn:in_ck="-6882141473673287851" xil_pn:name="TRANEXT_crtProg_xc9500" xil_pn:prop_ck="-6294026017969277533" xil_pn:start_ts="1728340941">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
-      <status xil_pn:value="OutOfDateForPredecessor"/>
       <outfile xil_pn:name="gotek_led.jed"/>
     </transform>
     <transform xil_pn:end_ts="1728252477" xil_pn:in_ck="-6882141473673287851" xil_pn:name="TRAN_timRpt" xil_pn:prop_ck="111903974446" xil_pn:start_ts="1728252476">
@@ -124,7 +119,6 @@
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
       <status xil_pn:value="OutOfDateForInputs"/>
-      <status xil_pn:value="OutOfDateForPredecessor"/>
       <status xil_pn:value="InputChanged"/>
     </transform>
   </transforms>
