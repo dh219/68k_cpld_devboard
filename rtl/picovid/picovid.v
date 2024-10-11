@@ -31,7 +31,7 @@ module picovid (
 	
 	input TP1,
 	
-	input P50,
+	output P50, // RTS
 	
 	input P52,
 	input P53,
@@ -54,31 +54,67 @@ module picovid (
 	output P70,
 	output P71,
 	input P72,
-	input P73
+	input P73	// strobe
     );
 
-/*
-reg [22:0] clk_d = 'd0;
-wire tick = clk_d[10];
+reg [23:0] a_in;
+reg [15:0] d_in;
 
-always @(posedge P50) begin
-	clk_d <= clk_d + 'd1;
-end
-*/
 reg [7:0] d = 'd1;
+reg rts = 1'b1;
+reg [3:0] strobestate = 'd0;
 
-always @( posedge P50 or negedge RESET ) begin
-	if( ~RESET )
-		d <= 'd1;
-	else begin
-		d <= d << 1;
-		if( d == 'd0 )
-			d <= 'd1;
-	end
+
+wire write = ( {A[23:15]} == 9'b000001111 ) && ~RW && ~DTACK;
+//wire write = ( {A[23:15]} == { 4'h6, 4'h0, 1'b0 } ) && ~RW && ( ~DTACK );
+wire ack = ( strobestate == 'd5 );
+
+always @( posedge write or posedge ack ) begin
+	if( ack )
+		rts <= 1'b1;
+	else if( write & rts ) begin
+		d_in <= D[15:0];
+		a_in <= {A[23:1],1'b0};
+		rts <= 1'b0;
+	end		
 end
 
-wire oe = P73;
-//reg oe = 1'b1;
+wire strobe = P73;
+
+
+always @(negedge strobe ) begin
+//	d_in <= D[15:0];
+//	a_in <= {A[23:1],1'b0};
+	case( strobestate )
+		'd0: begin
+			d <= a_in[23:16];
+			strobestate <= 'd1;
+		end
+		'd1: begin
+			d <= a_in[15:8];
+			strobestate <= 'd2;
+		end
+		'd2: begin
+			d <= a_in[7:0];
+			strobestate <= 'd3;			
+		end
+		'd3: begin
+			d <= d_in[15:8];
+			strobestate <= 'd4;
+		end
+		'd4: begin
+			d <= d_in[7:0];
+			strobestate <= 'd5;
+		end
+		'd5: begin // blank strobe to end
+			strobestate <= 'd0;
+		end
+	endcase
+		
+end
+
+
+wire oe = (strobestate == 'd0);
 
 // data lines
 assign P63 = oe ? 1'bz : d[0];
@@ -90,5 +126,6 @@ assign P68 = oe ? 1'bz : d[5];
 assign P70 = oe ? 1'bz : d[6];
 assign P71 = oe ? 1'bz : d[7];
 
+assign P50 = rts ? 1'bz: 1'b0;
 
 endmodule

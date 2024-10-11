@@ -94,3 +94,6 @@ NET	D<12>	LOC = "P37";
 NET	D<13>	LOC = "P36";
 NET	D<14>	LOC = "P35";
 NET	D<15>	LOC = "P34";
+#Created by Constraints Editor (xc95144xl-tq100-10) - 2024/10/11
+NET "P73" TNM_NET = P73;
+TIMESPEC TS_P73 = PERIOD "P73" 66 MHz HIGH 50%;
