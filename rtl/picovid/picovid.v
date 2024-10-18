@@ -17,7 +17,7 @@ module picovid (
 	input AS,
 	input LDS,
 	input UDS,
-	input DTACK,
+	output DTACK,
 	input BERR,
 	
 	input [2:0] IPL,
@@ -62,17 +62,88 @@ reg [15:0] d_in;
 
 reg [7:0] d = 'd1;
 reg _rts = 1'b1;
-//reg [3:0] strobestate = 'd0;
 
-//wire rst = ( A[23:20] == 'h2 );
+
 wire [2:0] padd = { P52, P50, P73 };
 
+wire address = ( A[23:20] == { 4'hd } ) & ~AS;
+reg write = 1'b0;
 
-//wire write = ( {A[23:15]} == 9'b000001111 ) && ~RW && ~DTACK;
-wire write = ( A[23:20] == { 4'h3 } ) && ~RW && ( ~DTACK );
-//wire ack = ~_rts & (padd != padd_rts);
-wire ack = ~_rts & (padd == 'd0);
+reg [2:0] state = 'd0;
+//wire idle = (state == 'd0);
+wire idle = (padd == 'd7);
+reg _dtack_in = 1'b1;
+reg uds_in;
 
+// I'm controlling dtack_in, state and _rts here
+always @( posedge CLK or negedge RESET ) begin
+
+	if( ~RESET ) begin
+		state <= 'd0;
+		_dtack_in <= 1'b1;
+		_rts <= 1'b1;
+	end
+	else begin
+		uds_in <= UDS;
+		case( state )
+			'd0: begin
+				_rts <= 1'b1;
+				_dtack_in <= 1'b1;
+				if( ~uds_in && address /*& ~RW */ && padd == 'd7 ) begin // if padd progression ongoing, wait before latching
+					_rts <= 1'b0;
+					d_in <= D[15:0];
+					a_in <= {A[23:1],1'b0};					
+					state <= 'd2;
+				end
+			end
+			'd1: begin
+				if( padd == 'd7 ) begin		
+					_rts <= 1'b0;
+					d_in <= D[15:0];
+					a_in <= {A[23:1],1'b0};					
+					state <= 'd4;
+				end
+				else if( uds_in )					// need an out if we miss a cycle
+					state <= 'd0;
+			end
+			'd2: begin		// assert dtack, wait for PADD progression to start or DS to rise
+				_dtack_in <= 1'b0;
+				if( uds_in ) begin
+					state <= 'd3;
+					_dtack_in <= 1'b1;
+				end
+				else if( padd != 'd7 )
+					state <= 'd4;
+			end
+			'd3: begin					// DS has deasserted, wait for padd to go active
+				_dtack_in <= 1'b1;	// deassert dtack
+				if( padd != 'd7 )
+					state <= 'd5;		// go to waiting for padd to finish
+			end
+			'd4: begin					// padd has gone active but DS still asserted
+				_rts <= 1'b1;			// deassert rts
+				if( uds_in ) begin
+					_dtack_in <= 1'b1;	// deassert DTACK
+					state <= 'd5;			// go to waiting for padd to finish
+				end
+			end
+			'd5: begin					// DTACK cycle complete, padd may or may not be complete, wait for that
+				_rts <= 1'b1;
+				_dtack_in <= 1'b1;
+				if( padd == 'd7 )
+					state <= 'd0;
+			end
+			default:
+				state <= 'd0;
+		endcase					
+	end
+
+end
+
+
+//wire write = ( A[23:20] == { 4'hc } ) && ~RW && ( ~UDS );
+//wire ack = ~_rts & (padd == 'd0);
+/*
 
 always @( posedge write or posedge ack ) begin
 	if( ack )
@@ -83,43 +154,11 @@ always @( posedge write or posedge ack ) begin
 		_rts <= 1'b0;
 	end		
 end
+*/
+
 /*
-wire strobe = P73;
-
-
-always @(negedge strobe or posedge rst ) begin
-//	d_in <= D[15:0];
-//	a_in <= {A[23:1],1'b0};
-
-	if( rst )
-		strobestate <= 'd0;
-	else begin
-		case( strobestate )
-			'd0: begin
-				d <= a_in[23:16];
-				strobestate <= 'd1;
-			end
-			'd1: begin
-				d <= a_in[15:8];
-				strobestate <= 'd2;
-			end
-			'd2: begin
-				d <= a_in[7:0];
-				strobestate <= 'd3;			
-			end
-			'd3: begin
-				d <= d_in[15:8];
-				strobestate <= 'd4;
-			end
-			'd4: begin
-				d <= d_in[7:0];
-				strobestate <= 'd5;
-			end
-			'd5: begin // blank strobe to end
-				strobestate <= 'd0;
-			end
-		endcase
-	end
+always @( negedge CLK ) begin
+	d <= d + 'd1;
 end
 */
 
@@ -130,24 +169,24 @@ always @( padd ) begin
 		'd2: d <= a_in[7:0];
 		'd3: d <= d_in[15:8];
 		'd4: d <= d_in[7:0];
-		default: 	d <= { 5'd0, padd };
+
+		default: 	d <= { 5'd0, state };
 	endcase
 end
-	
 
-
-wire oe = ( padd == 'd7 );
 
 // data lines
-assign P63 = oe ? 1'bz : d[0];
-assign P64 = oe ? 1'bz : d[1];
-assign P65 = oe ? 1'bz : d[2];
-assign P66 = oe ? 1'bz : d[3];
-assign P67 = oe ? 1'bz : d[4];
-assign P68 = oe ? 1'bz : d[5];
-assign P70 = oe ? 1'bz : d[6];
-assign P71 = oe ? 1'bz : d[7];
+assign P63 = idle ? 1'bz : d[0];
+assign P64 = idle ? 1'bz : d[1];
+assign P65 = idle ? 1'bz : d[2];
+assign P66 = idle ? 1'bz : d[3];
+assign P67 = idle ? 1'bz : d[4];
+assign P68 = idle ? 1'bz : d[5];
+assign P70 = idle ? 1'bz : d[6];
+assign P71 = idle ? 1'bz : d[7];
 
 assign P72 = _rts ? 1'bz: 1'b0;
+
+assign DTACK = _dtack_in ? 1'bz : 1'b0;
 
 endmodule
