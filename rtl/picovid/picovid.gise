@@ -58,15 +58,7 @@
   </files>
 
   <transforms xmlns="http://www.xilinx.com/XMLSchema">
-    <transform xil_pn:end_ts="1729032245" xil_pn:name="TRAN_copyInitialToXSTAbstractSynthesis" xil_pn:start_ts="1729032245">
-      <status xil_pn:value="SuccessfullyRun"/>
-      <status xil_pn:value="ReadyToRun"/>
-    </transform>
-    <transform xil_pn:end_ts="1729032245" xil_pn:name="TRAN_schematicsToHdl" xil_pn:prop_ck="5302892484119282485" xil_pn:start_ts="1729032245">
-      <status xil_pn:value="SuccessfullyRun"/>
-      <status xil_pn:value="ReadyToRun"/>
-    </transform>
-    <transform xil_pn:end_ts="1729198208" xil_pn:in_ck="162125044935730" xil_pn:name="TRANEXT_xstsynthesize_xc9500xl" xil_pn:prop_ck="-8761989355731810270" xil_pn:start_ts="1729198202">
+    <transform xil_pn:end_ts="1729803055" xil_pn:in_ck="162125044935730" xil_pn:name="TRANEXT_xstsynthesize_xc9500xl" xil_pn:prop_ck="-8761989355731810270" xil_pn:start_ts="1729803050">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
@@ -82,12 +74,13 @@
       <outfile xil_pn:name="webtalk_pn.xml"/>
       <outfile xil_pn:name="xst"/>
     </transform>
-    <transform xil_pn:end_ts="1729032315" xil_pn:in_ck="176554173935012250" xil_pn:name="TRAN_compileBCD2" xil_pn:prop_ck="1262981278820289424" xil_pn:start_ts="1729032315">
+    <transform xil_pn:end_ts="1729801991" xil_pn:in_ck="176554173935012250" xil_pn:name="TRAN_compileBCD2" xil_pn:prop_ck="1262981278820289424" xil_pn:start_ts="1729801991">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
     </transform>
-    <transform xil_pn:end_ts="1729198212" xil_pn:in_ck="8647046616431958382" xil_pn:name="TRAN_ngdbuild" xil_pn:prop_ck="1893441463969615248" xil_pn:start_ts="1729198208">
+    <transform xil_pn:end_ts="1729803060" xil_pn:in_ck="8647046616431958382" xil_pn:name="TRAN_ngdbuild" xil_pn:prop_ck="1893441463969615248" xil_pn:start_ts="1729803055">
       <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
       <outfile xil_pn:name="_ngo"/>
       <outfile xil_pn:name="_xmsgs/ngdbuild.xmsgs"/>
@@ -95,10 +88,11 @@
       <outfile xil_pn:name="picovid.ngd"/>
       <outfile xil_pn:name="picovid_ngdbuild.xrpt"/>
     </transform>
-    <transform xil_pn:end_ts="1729198217" xil_pn:in_ck="176554173935004757" xil_pn:name="TRANEXT_vm6File_xc9500xl" xil_pn:prop_ck="9193167474450869078" xil_pn:start_ts="1729198212">
+    <transform xil_pn:end_ts="1729803161" xil_pn:in_ck="176554173935004757" xil_pn:name="TRANEXT_vm6File_xc9500xl" xil_pn:prop_ck="-1007986334733640008" xil_pn:start_ts="1729803151">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForProperties"/>
       <outfile xil_pn:name="picovid.gyd"/>
       <outfile xil_pn:name="picovid.mfd"/>
       <outfile xil_pn:name="picovid.nga"/>
@@ -112,14 +106,22 @@
       <outfile xil_pn:name="picovid_build.xml"/>
       <outfile xil_pn:name="picovid_pad.csv"/>
     </transform>
-    <transform xil_pn:end_ts="1729198219" xil_pn:in_ck="176554173935013621" xil_pn:name="TRANEXT_crtProg_xc9500" xil_pn:prop_ck="-6294026017969277533" xil_pn:start_ts="1729198217">
+    <transform xil_pn:end_ts="1729803162" xil_pn:in_ck="176554173935013621" xil_pn:name="TRANEXT_crtProg_xc9500" xil_pn:prop_ck="-6294026017969277533" xil_pn:start_ts="1729803161">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
       <outfile xil_pn:name="picovid.jed"/>
     </transform>
-    <transform xil_pn:end_ts="1729032325" xil_pn:in_ck="176554173935013621" xil_pn:name="TRAN_timRpt" xil_pn:prop_ck="111903974446" xil_pn:start_ts="1729032323">
+    <transform xil_pn:end_ts="1729802062" xil_pn:in_ck="176554173935013621" xil_pn:name="TRAN_timRpt" xil_pn:prop_ck="111903974446" xil_pn:start_ts="1729802060">
       <status xil_pn:value="AbortedRun"/>
       <status xil_pn:value="WarningsGenerated"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForInputs"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
+      <status xil_pn:value="InputChanged"/>
+    </transform>
+    <transform xil_pn:end_ts="1729801935" xil_pn:in_ck="8697588722945685199" xil_pn:name="TRAN_createTimingConstraints" xil_pn:start_ts="1729801935">
+      <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
       <status xil_pn:value="OutOfDateForInputs"/>
       <status xil_pn:value="InputChanged"/>

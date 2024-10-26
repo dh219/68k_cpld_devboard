@@ -42,7 +42,7 @@ module picovid (
 	input P58,
 	input P59,
 	input P60,
-	input P61,
+	input P61,	// OSC
 	
 	output P63, // DATA OUT
 	output P64, // DATA OUT
@@ -57,136 +57,107 @@ module picovid (
 	input P73 	// POLL ADDRESS
     );
 
+wire OSC = P61;
+
 reg [23:0] a_in;
 reg [15:0] d_in;
 
 reg [7:0] d = 'd1;
-reg _rts = 1'b1;
-
 
 wire [2:0] padd = { P52, P50, P73 };
 
-wire address = ( A[23:20] == { 4'hd } ) & ~AS;
-reg write = 1'b0;
+wire address = ( A[23:20] == { 4'h3 } ) & ~AS & ~(UDS&LDS);
 
-reg [2:0] state = 'd0;
-//wire idle = (state == 'd0);
-wire idle = (padd == 'd7);
+reg trig = 1'b0;
+reg ack = 1'b0;
+reg clkout = 1'b0;
 reg _dtack_in = 1'b1;
-reg uds_in;
 
-// I'm controlling dtack_in, state and _rts here
-always @( posedge CLK or negedge RESET ) begin
+always @( posedge address ) begin
+	d_in <= D[15:0];
+	a_in <= {A[23:1],1'b0};					
+	trig <= ~trig;
+end
 
-	if( ~RESET ) begin
-		state <= 'd0;
-		_dtack_in <= 1'b1;
-		_rts <= 1'b1;
-	end
-	else begin
-		uds_in <= UDS;
-		case( state )
-			'd0: begin
-				_rts <= 1'b1;
+reg [3:0] cycle = 'd0;
+reg active = 1'b0;
+always @(posedge OSC) begin
+
+	case(cycle)
+		'd0: begin
+			if( trig ^ ack )
+				cycle <= 'd1;
+			clkout <= 1'b0;
+			active <= 1'b0;
+			_dtack_in <= 1'b1;
+		end
+		'd1: begin
+			ack <= ~ack;
+			d <= a_in[23:16];
+			active <= 1'b1;
+			clkout <= 1'b0;
+			cycle <= 'd2;			
+		end
+		'd3: begin
+			d <= a_in[15:8];
+			active <= 1'b1;
+			clkout <= 1'b0;
+			cycle <= 'd4;			
+		end
+		'd5: begin
+			d <= a_in[7:0];
+			active <= 1'b1;
+			clkout <= 1'b0;
+			cycle <= 'd6;			
+		end
+		'd7:  begin
+			d <= D[15:8];
+			active <= 1'b1;
+			clkout <= 1'b0;
+			cycle <= 'd8;			
+		end
+		'd9: begin
+			d <= D[7:0];
+			active <= 1'b1;
+			clkout <= 1'b0;
+			cycle <= 'd10;			
+		end
+		'd11: begin
+			active <= 1'b0;
+			clkout <= 1'b0;
+			_dtack_in <= 1'b0;
+			cycle <= 'd12;
+		end
+		'd12: begin
+			if( AS ) begin
 				_dtack_in <= 1'b1;
-				if( ~uds_in && address /*& ~RW */ && padd == 'd7 ) begin // if padd progression ongoing, wait before latching
-					_rts <= 1'b0;
-					d_in <= D[15:0];
-					a_in <= {A[23:1],1'b0};					
-					state <= 'd2;
-				end
+				cycle <= 'd0;
 			end
-			'd1: begin
-				if( padd == 'd7 ) begin		
-					_rts <= 1'b0;
-					d_in <= D[15:0];
-					a_in <= {A[23:1],1'b0};					
-					state <= 'd4;
-				end
-				else if( uds_in )					// need an out if we miss a cycle
-					state <= 'd0;
-			end
-			'd2: begin		// assert dtack, wait for PADD progression to start or DS to rise
-				_dtack_in <= 1'b0;
-				if( uds_in ) begin
-					state <= 'd3;
-					_dtack_in <= 1'b1;
-				end
-				else if( padd != 'd7 )
-					state <= 'd4;
-			end
-			'd3: begin					// DS has deasserted, wait for padd to go active
-				_dtack_in <= 1'b1;	// deassert dtack
-				if( padd != 'd7 )
-					state <= 'd5;		// go to waiting for padd to finish
-			end
-			'd4: begin					// padd has gone active but DS still asserted
-				_rts <= 1'b1;			// deassert rts
-				if( uds_in ) begin
-					_dtack_in <= 1'b1;	// deassert DTACK
-					state <= 'd5;			// go to waiting for padd to finish
-				end
-			end
-			'd5: begin					// DTACK cycle complete, padd may or may not be complete, wait for that
-				_rts <= 1'b1;
-				_dtack_in <= 1'b1;
-				if( padd == 'd7 )
-					state <= 'd0;
-			end
-			default:
-				state <= 'd0;
-		endcase					
-	end
-
-end
-
-
-//wire write = ( A[23:20] == { 4'hc } ) && ~RW && ( ~UDS );
-//wire ack = ~_rts & (padd == 'd0);
-/*
-
-always @( posedge write or posedge ack ) begin
-	if( ack )
-		_rts <= 1'b1;
-	else if( write & _rts) begin
-		d_in <= D[15:0];
-		a_in <= {A[23:1],1'b0};
-		_rts <= 1'b0;
-	end		
-end
-*/
-
-/*
-always @( negedge CLK ) begin
-	d <= d + 'd1;
-end
-*/
-
-always @( padd ) begin
-	case(padd)
-		'd0: d <= a_in[23:16];
-		'd1: d <= a_in[15:8];
-		'd2: d <= a_in[7:0];
-		'd3: d <= d_in[15:8];
-		'd4: d <= d_in[7:0];
-
-		default: 	d <= { 5'd0, state };
+		end
+		default:	begin
+			active <= 1'b1;
+			clkout <= 1'b1;
+			cycle <= cycle + 'd1;			
+		end
 	endcase
-end
+ 
 
+end
 
 // data lines
-assign P63 = idle ? 1'bz : d[0];
-assign P64 = idle ? 1'bz : d[1];
-assign P65 = idle ? 1'bz : d[2];
-assign P66 = idle ? 1'bz : d[3];
-assign P67 = idle ? 1'bz : d[4];
-assign P68 = idle ? 1'bz : d[5];
-assign P70 = idle ? 1'bz : d[6];
-assign P71 = idle ? 1'bz : d[7];
+assign P63 = active ? d[0]: 1'bz;
+assign P64 = active ? d[1]: 1'bz;
+assign P65 = active ? d[2]: 1'bz;
+assign P66 = active ? d[3]: 1'bz;
+assign P67 = active ? d[4]: 1'bz;
+assign P68 = active ? d[5]: 1'bz;
+assign P70 = active ? d[6]: 1'bz;
+assign P71 = active ? d[7]: 1'bz;
 
-assign P72 = _rts ? 1'bz: 1'b0;
+assign P72 = clkout;
 
-assign DTACK = _dtack_in ? 1'bz : 1'b0;
+
+assign DTACK = 1'bz;//_dtack_in ? 1'bz : 1'b0;
+//assign DTACK = address ? 1'b0 : 1'bz;
 
 endmodule
