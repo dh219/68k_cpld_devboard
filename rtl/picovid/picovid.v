@@ -31,9 +31,9 @@ module picovid (
 	
 	input TP1,
 	
-	input P50, // POLL ADDRESS
+	output P50, // byte ID[1]
 	
-	input P52, // POLL ADDRESS
+	output P52, // byte ID[2]
 	input P53,
 	input P54,
 	input P55,
@@ -54,7 +54,7 @@ module picovid (
 	output P70, // DATA OUT 
 	output P71, // DATA OUT
 	output P72, 	// RTS (out)
-	input P73 	// POLL ADDRESS
+	output P73 	// byte ID[0]
     );
 
 wire OSC = P61;
@@ -66,7 +66,17 @@ reg [7:0] d = 'd1;
 
 wire [2:0] padd = { P52, P50, P73 };
 
-wire address = ( A[23:20] == { 4'h3 } ) & ~AS & ~(UDS&LDS);
+//wire address = ( A[23:20] == { 4'h3 } ) & ~AS & ~(UDS&LDS);
+
+reg address;
+reg [1:0] ds_in;
+always @( posedge CLK ) begin
+	address <= 1'b0;
+	if( ~RW && ( A[23:20] == { 4'h3 } ) & ~AS & ~(UDS&LDS) ) begin
+		address <= 1'b1;
+		ds_in <= { UDS, LDS };
+	end
+end
 
 reg trig = 1'b0;
 reg ack = 1'b0;
@@ -81,6 +91,7 @@ end
 
 reg [3:0] cycle = 'd0;
 reg active = 1'b0;
+reg [2:0] type;
 always @(posedge OSC) begin
 
 	case(cycle)
@@ -90,40 +101,47 @@ always @(posedge OSC) begin
 			clkout <= 1'b0;
 			active <= 1'b0;
 			_dtack_in <= 1'b1;
+			type <= 'd0;
 		end
 		'd1: begin
 			ack <= ~ack;
 			d <= a_in[23:16];
+			type <= 'd1;
 			active <= 1'b1;
 			clkout <= 1'b0;
 			cycle <= 'd2;			
 		end
 		'd3: begin
 			d <= a_in[15:8];
+			type <= 'd2;
 			active <= 1'b1;
 			clkout <= 1'b0;
 			cycle <= 'd4;			
 		end
 		'd5: begin
 			d <= a_in[7:0];
+			type <= 'd3;
 			active <= 1'b1;
 			clkout <= 1'b0;
 			cycle <= 'd6;			
 		end
 		'd7:  begin
-			d <= D[15:8];
+			d <= d_in[15:8];
+			type <= ds_in[1] ? 'd6 : 'd4;
 			active <= 1'b1;
 			clkout <= 1'b0;
 			cycle <= 'd8;			
 		end
 		'd9: begin
-			d <= D[7:0];
+			d <= d_in[7:0];
+			type <= ds_in[0] ? 'd7 : 'd5;
 			active <= 1'b1;
 			clkout <= 1'b0;
 			cycle <= 'd10;			
 		end
 		'd11: begin
 			active <= 1'b0;
+			type <= 'd0;
 			clkout <= 1'b0;
 			_dtack_in <= 1'b0;
 			cycle <= 'd12;
@@ -155,6 +173,11 @@ assign P70 = active ? d[6]: 1'bz;
 assign P71 = active ? d[7]: 1'bz;
 
 assign P72 = clkout;
+
+assign P73 	= type[0];
+assign P50  = type[1];
+assign P52  = type[2];
+
 
 
 assign DTACK = 1'bz;//_dtack_in ? 1'bz : 1'b0;
