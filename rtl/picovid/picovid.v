@@ -129,16 +129,16 @@ always @(posedge OSC) begin
 		end
 		'd7:  begin
 			d <= d_in[15:8];
-			type <= ds_in[1] ? 'd5 : 'd4;
+			type <= ds_in[0] ? 'd5 : 'd4;
 			active <= 1'b1;
-			clkout <= ds_in[0] ? 1'b1 : 1'b0;
+			clkout <= ds_in[1] ? 1'b1 : 1'b0;
 			cycle <= 'd8;
 		end
 		'd9: begin
 			d <= d_in[7:0];
 			type <= 'd6;
 			active <= 1'b1;
-			clkout <= ds_in[1] ? 1'b1 : 1'b0;
+			clkout <= ds_in[0] ? 1'b1 : 1'b0;
 			cycle <= 'd10;			
 		end
 		'd11: begin
