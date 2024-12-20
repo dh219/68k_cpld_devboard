@@ -66,17 +66,19 @@ reg [7:0] d = 'd1;
 
 wire [2:0] padd = { P52, P50, P73 };
 
-wire base = ( A[18:15] == 4'b1111 );
+//wire base = ( A[18:15] == 4'b1111 );
 
 //wire address = ( A[23:20] == { 4'h3 } ) & ~AS & ~(UDS&LDS);
 
 reg address;
-reg [1:0] ds_in;
+reg uds_in;
+reg lds_in;
 always @( posedge CLK ) begin
 	address <= 1'b0;
-	if( ~RW && ( base ) & ~AS & ~(UDS&LDS) ) begin
+	if( ~RW & ~AS & ~(UDS&LDS) ) begin
 		address <= 1'b1;
-		ds_in <= { UDS, LDS };
+		uds_in <= UDS;
+		lds_in <= LDS;
 	end
 end
 
@@ -129,16 +131,16 @@ always @(posedge OSC) begin
 		end
 		'd7:  begin
 			d <= d_in[15:8];
-			type <= ds_in[0] ? 'd5 : 'd4;
+			type <= lds_in ? 'd5 : 'd4; // if LDS is coming type = 4, else let's finish with type = 5
 			active <= 1'b1;
-			clkout <= ds_in[1] ? 1'b1 : 1'b0;
+			clkout <= uds_in ? 1'b1 : 1'b0;
 			cycle <= 'd8;
 		end
 		'd9: begin
 			d <= d_in[7:0];
 			type <= 'd6;
 			active <= 1'b1;
-			clkout <= ds_in[0] ? 1'b1 : 1'b0;
+			clkout <= lds_in ? 1'b1 : 1'b0;
 			cycle <= 'd10;			
 		end
 		'd11: begin
