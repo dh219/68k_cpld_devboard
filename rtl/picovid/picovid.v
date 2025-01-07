@@ -68,8 +68,6 @@ wire [2:0] padd = { P52, P50, P73 };
 
 //wire base = ( A[18:15] == 4'b1111 );
 
-//wire address = ( A[23:20] == { 4'h3 } ) & ~AS & ~(UDS&LDS);
-
 reg address;
 reg uds_in;
 reg lds_in;
@@ -183,8 +181,8 @@ assign P50  = type[1];
 assign P52  = type[2];
 
 
-
-assign DTACK = 1'bz;//_dtack_in ? 1'bz : 1'b0;
-//assign DTACK = address ? 1'b0 : 1'bz;
+wire reg_access = ( { A[23:1], 1'b1 } == 24'hF1DDB1 ) && !LDS && UDS && !AS;
+//assign DTACK = 1'bz;//_dtack_in ? 1'bz : 1'b0;
+assign DTACK = reg_access ? 1'b0 : 1'bz;
 
 endmodule
