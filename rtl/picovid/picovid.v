@@ -181,7 +181,7 @@ assign P50  = type[1];
 assign P52  = type[2];
 
 
-wire reg_access = ( { A[23:1], 1'b1 } == 24'hF1DDB1 ) && !LDS && UDS && !AS;
+wire reg_access = ( { A[23:1], 1'b0 } == 24'hF1DDB0 ) && !UDS && !LDS && !AS;
 //assign DTACK = 1'bz;//_dtack_in ? 1'bz : 1'b0;
 assign DTACK = reg_access ? 1'b0 : 1'bz;
 
