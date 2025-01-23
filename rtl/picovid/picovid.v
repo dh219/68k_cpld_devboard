@@ -181,8 +181,9 @@ assign P50  = type[1];
 assign P52  = type[2];
 
 
-wire reg_access = ( { A[23:1], 1'b0 } == 24'hF1DDB0 ) && !UDS && !LDS && !AS;
+wire reg_access = ( A[23:4] == 20'hF1DDB ) && !UDS && !LDS && !AS;
+wire falpal_reg_access = ( A[23:10] == 14'h3fe6 ) && !UDS && !LDS && !AS; // Falcon pallete
 //assign DTACK = 1'bz;//_dtack_in ? 1'bz : 1'b0;
-assign DTACK = reg_access ? 1'b0 : 1'bz;
+assign DTACK = (reg_access|falpal_reg_access) ? 1'b0 : 1'bz;
 
 endmodule
