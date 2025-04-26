@@ -6,65 +6,64 @@ module picovid (
 	input CLK,
 
 	input RESET,
-	input HALT,
-
-	input BR,
-	input BG,
-	input BGACK,
-	
-	input [2:0] FC,
 	input RW,
 	input AS,
 	input LDS,
 	input UDS,
 	output DTACK,
-	input BERR,
+
+	output VSYNC_OUT,
+	output HSYNC_OUT,
+	output BLANK_OUT,
 	
-	input [2:0] IPL,
+	input HSYNC,
+	input VSYNC,
+	input BLANK,
 	
-	input VPA,
-	input VMA,
-	input E,
+	input PICOVSYNC,
+	input PICOHSYNC,
 	
+	output SHIFTEREN,
+	output PICOEN,
+
 	input [23:1] A,
 	input [15:0] D,
 	
 	input TP1,
+	input TP2,
+	input TP3,
+	input TP4,
 	
-	output P50, // byte ID[1]
 	
-	output P52, // byte ID[2]
-	input P53,
-	input P54,
-	input P55,
-	input P56,
+
+	input OSC48,	// OSC
 	
-	input P58,
-	input P59,
-	input P60,
-	input P61,	// OSC
-	
+	output [7:0] PICOD,
+/*
 	output P63, // DATA OUT
 	output P64, // DATA OUT
 	output P65, // DATA OUT
 	output P66, // DATA OUT
 	output P67, // DATA OUT
 	output P68, // DATA OUT
-	
 	output P70, // DATA OUT 
 	output P71, // DATA OUT
-	output P72, 	// RTS (out)
-	output P73 	// byte ID[0]
-    );
+*/
+	output PICOCLK,
+	output PICOA0,
+	output PICOA1,
+	output PICOA2 // byte ID[2]
 
-wire OSC = P61;
+    );
 
 reg [23:0] a_in;
 reg [15:0] d_in;
 
 reg [7:0] d = 'd1;
 
-wire [2:0] padd = { P52, P50, P73 };
+reg mode = 1'b0;
+
+//wire [2:0] padd = { P52, P50, P73 };
 
 //wire base = ( A[18:15] == 4'b1111 );
 
@@ -94,7 +93,7 @@ end
 reg [3:0] cycle = 'd0;
 reg active = 1'b0;
 reg [2:0] type;
-always @(posedge OSC) begin
+always @(posedge OSC48) begin
 
 	case(cycle)
 		'd0: begin
@@ -165,7 +164,7 @@ always @(posedge OSC) begin
 end
 
 // data lines
-assign P63 = active ? d[0]: 1'bz;
+/*assign P63 = active ? d[0]: 1'bz;
 assign P64 = active ? d[1]: 1'bz;
 assign P65 = active ? d[2]: 1'bz;
 assign P66 = active ? d[3]: 1'bz;
@@ -173,17 +172,40 @@ assign P67 = active ? d[4]: 1'bz;
 assign P68 = active ? d[5]: 1'bz;
 assign P70 = active ? d[6]: 1'bz;
 assign P71 = active ? d[7]: 1'bz;
+*/
+assign PICOD = active ? d : 8'bz;
 
-assign P72 = clkout;
+assign PICOCLK = clkout;
 
-assign P73 	= type[0];
-assign P50  = type[1];
-assign P52  = type[2];
+assign PICOA0 	= type[0];
+assign PICOA1  = type[1];
+assign PICOA2  = type[2];
+
+
+assign VSYNC_OUT = mode ? PICOVSYNC : VSYNC;
+assign HSYNC_OUT = mode ? PICOHSYNC : HSYNC;
+assign BLANK_OUT = mode ? 1'b1 : BLANK;
+
+assign SHIFTEREN = mode;
+assign PICOEN = !mode;
 
 
 wire reg_access = ( A[23:4] == 20'hF1DDB ) && !UDS && !LDS && !AS;
 wire falpal_reg_access = ( A[23:10] == 14'h3fe6 ) && !UDS && !LDS && !AS; // Falcon pallete
+
+//always @(posedge reg_access) begin
+//	mode <= !mode;
+//end
+
 //assign DTACK = 1'bz;//_dtack_in ? 1'bz : 1'b0;
 assign DTACK = (reg_access|falpal_reg_access) ? 1'b0 : 1'bz;
+
+/* switch mode every N vsyncs so I can see what's going on */
+reg [8:0] vsync_counter = 'd0;
+always @( negedge VSYNC ) begin
+	vsync_counter <= vsync_counter + 'd1;
+	mode <= vsync_counter[8];
+end
+
 
 endmodule
