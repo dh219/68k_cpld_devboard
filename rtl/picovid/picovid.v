@@ -33,27 +33,13 @@ module picovid (
 	input TP2,
 	input TP3,
 	input TP4,
-	
-	
 
 	input OSC48,	// OSC
 	
 	output [7:0] PICOD,
-/*
-	output P63, // DATA OUT
-	output P64, // DATA OUT
-	output P65, // DATA OUT
-	output P66, // DATA OUT
-	output P67, // DATA OUT
-	output P68, // DATA OUT
-	output P70, // DATA OUT 
-	output P71, // DATA OUT
-*/
-	output PICOCLK,
-	output PICOA0,
-	output PICOA1,
-	output PICOA2 // byte ID[2]
 
+	output PICOCLK,
+	output [2:0] PICOA
     );
 
 reg [23:0] a_in;
@@ -70,9 +56,11 @@ reg mode = 1'b0;
 reg address;
 reg uds_in;
 reg lds_in;
-always @( posedge CLK ) begin
+wire idle;
+
+always @( negedge CLK ) begin
 	address <= 1'b0;
-	if( ~RW & ~AS & ~(UDS&LDS) ) begin
+	if( ~RW & ~AS & ~(UDS&LDS) && ~TP4 && idle ) begin
 		address <= 1'b1;
 		uds_in <= UDS;
 		lds_in <= LDS;
@@ -84,6 +72,8 @@ reg ack = 1'b0;
 reg clkout = 1'b0;
 reg _dtack_in = 1'b1;
 
+
+
 always @( posedge address ) begin
 	d_in <= D[15:0];
 	a_in <= {A[23:1],1'b0};					
@@ -93,8 +83,10 @@ end
 reg [3:0] cycle = 'd0;
 reg active = 1'b0;
 reg [2:0] type;
-always @(posedge OSC48) begin
 
+assign idle = cycle == 'd0;
+
+always @(posedge OSC48 ) begin
 	case(cycle)
 		'd0: begin
 			if( trig ^ ack )
@@ -105,7 +97,8 @@ always @(posedge OSC48) begin
 			type <= 'd0;
 		end
 		'd1: begin
-			ack <= ~ack;
+			//ack <= ~ack;
+			ack <= trig;
 			d <= a_in[23:16];
 			type <= 'd1;
 			active <= 1'b1;
@@ -159,28 +152,11 @@ always @(posedge OSC48) begin
 			cycle <= cycle + 'd1;			
 		end
 	endcase
- 
-
 end
 
-// data lines
-/*assign P63 = active ? d[0]: 1'bz;
-assign P64 = active ? d[1]: 1'bz;
-assign P65 = active ? d[2]: 1'bz;
-assign P66 = active ? d[3]: 1'bz;
-assign P67 = active ? d[4]: 1'bz;
-assign P68 = active ? d[5]: 1'bz;
-assign P70 = active ? d[6]: 1'bz;
-assign P71 = active ? d[7]: 1'bz;
-*/
 assign PICOD = active ? d : 8'bz;
-
 assign PICOCLK = clkout;
-
-assign PICOA0 	= type[0];
-assign PICOA1  = type[1];
-assign PICOA2  = type[2];
-
+assign PICOA 	= type;
 
 assign VSYNC_OUT = mode ? PICOVSYNC : VSYNC;
 assign HSYNC_OUT = mode ? PICOHSYNC : HSYNC;
@@ -201,10 +177,25 @@ wire falpal_reg_access = ( A[23:10] == 14'h3fe6 ) && !UDS && !LDS && !AS; // Fal
 assign DTACK = (reg_access|falpal_reg_access) ? 1'b0 : 1'bz;
 
 /* switch mode every N vsyncs so I can see what's going on */
+/*
 reg [8:0] vsync_counter = 'd0;
 always @( negedge VSYNC ) begin
 	vsync_counter <= vsync_counter + 'd1;
 	mode <= vsync_counter[8];
+end
+*/
+
+reg [8:0] vsync_counter = 'd0;
+always @( negedge VSYNC ) begin
+	if( !RESET )
+		vsync_counter <= vsync_counter + 'd1;
+	else
+		vsync_counter <= 'd0;
+//	mode <= vsync_counter[8];
+end
+
+always @( posedge vsync_counter[7] ) begin
+	mode <= ~mode;
 end
 
 
