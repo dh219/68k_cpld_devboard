@@ -166,35 +166,26 @@ assign SHIFTEREN = mode;
 assign PICOEN = !mode;
 
 
-wire reg_access = ( A[23:4] == 20'hF1DDB ) && !UDS && !LDS && !AS;
+wire reg_access 		= ( A[23:4] == 20'hF1DDB ) && !UDS && !LDS && !AS;
+wire altreg_access 	= ( A[23:4] == 20'h00030 ) && !UDS && !LDS && !AS;
 wire falpal_reg_access = ( A[23:10] == 14'h3fe6 ) && !UDS && !LDS && !AS; // Falcon pallete
 
-//always @(posedge reg_access) begin
-//	mode <= !mode;
-//end
 
 //assign DTACK = 1'bz;//_dtack_in ? 1'bz : 1'b0;
-assign DTACK = (reg_access|falpal_reg_access) ? 1'b0 : 1'bz;
+assign DTACK = (reg_access|falpal_reg_access|altreg_access) ? 1'b0 : 1'bz;
 
-/* switch mode every N vsyncs so I can see what's going on */
-/*
-reg [8:0] vsync_counter = 'd0;
-always @( negedge VSYNC ) begin
-	vsync_counter <= vsync_counter + 'd1;
-	mode <= vsync_counter[8];
-end
-*/
-
-reg [8:0] vsync_counter = 'd0;
+/* reset held timer (using vsync) to switch modes */
+reg [7:0] vsync_counter = 'd0;
 always @( negedge VSYNC ) begin
 	if( !RESET )
 		vsync_counter <= vsync_counter + 'd1;
 	else
 		vsync_counter <= 'd0;
-//	mode <= vsync_counter[8];
 end
 
-always @( posedge vsync_counter[7] ) begin
+wire modereg = altreg_access & ( A[3:1] == 3'd7 ) & ~RW & address;
+wire modechange = ( vsync_counter[7] | modereg );
+always @( posedge modechange ) begin
 	mode <= ~mode;
 end
 
