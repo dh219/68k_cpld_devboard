@@ -76,25 +76,30 @@ reg [1:0] AS_S;
 reg [1:0] RW_S;
 reg [1:0] UDS_S;
 reg [1:0] LDS_S;
+reg [1:0] LOAD_S;
 
 always @( posedge OSC48 ) begin
 	AS_S <= {AS_S[0], AS};
 	RW_S <= {RW_S[0], RW};
 	UDS_S <= {UDS_S[0], UDS};
 	LDS_S <= {LDS_S[0], LDS};
+	LOAD_S <= {LOAD_S[0],LOAD};
 end
 
 reg address_trigger = 1'b0;
 always @( posedge OSC48 ) begin
-	address_trigger <= ( !RW && !AS && !(UDS&LDS) && LOAD );
+//	address_trigger <= ( !RW && !AS && !(UDS&LDS) && LOAD );
+	address_trigger <= ( idle && !RW_S[1] && !AS_S[1] && !(UDS_S[1]&LDS_S[1]) && LOAD_S[1] );
 end
-
 
 always @( posedge address_trigger ) begin
    a1 <= {A[23:1],1'b0};					
+	uds1 <= UDS_S[1];
+	lds1 <= LDS_S[1];
+end
+
+always @( negedge address_trigger ) begin
 	d1 <= D[15:0];
-	uds1 <= UDS;
-	lds1 <= LDS;
 	trig1 <= ~trig1;
 end
 
@@ -132,8 +137,8 @@ always @(posedge OSC48 ) begin
 			
 			if( trig1 ^ ack1 ) begin
 				cmode <= 1'b1;
-				uds_composite <= UDS;//uds1;
-				lds_composite <= LDS;//lds1;
+				uds_composite <= uds1;
+				lds_composite <= lds1;
 				cycle <= 'd1;
 			end
 			/*
