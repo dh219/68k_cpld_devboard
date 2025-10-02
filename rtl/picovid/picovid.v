@@ -31,7 +31,7 @@ module picovid (
 	
 	input TP1,
 	input TP2,
-	input TP3,
+	output TP3,
 	output TP4, // VSYNC ORIG
 
 	input OSC48,	// OSC
@@ -63,13 +63,6 @@ reg lds1;
 wire idle;
 wire LOAD = TP1;
 
-reg address_trigger;
-always @( posedge OSC48 ) begin
-	address_trigger <= 1'b0;
-	if( ~RW & ~AS & ~(UDS&LDS) && LOAD && idle ) begin
-		address_trigger <= 1'b1;
-	end
-end
 
 reg trig0 = 1'b0;
 reg trig1 = 1'b0;
@@ -78,23 +71,38 @@ reg ack1 = 1'b0;
 reg clkout = 1'b0;
 reg _dtack_in = 1'b1;
 
-reg [7:0] vsync_counter = 'd0;
+
+reg [1:0] AS_S;
+reg [1:0] RW_S;
+reg [1:0] UDS_S;
+reg [1:0] LDS_S;
+
+always @( posedge OSC48 ) begin
+	AS_S <= {AS_S[0], AS};
+	RW_S <= {RW_S[0], RW};
+	UDS_S <= {UDS_S[0], UDS};
+	LDS_S <= {LDS_S[0], LDS};
+end
+
+reg address_trigger = 1'b0;
+always @( posedge OSC48 ) begin
+	address_trigger <= ( !RW && !AS && !(UDS&LDS) && LOAD );
+end
 
 
 always @( posedge address_trigger ) begin
-	d1 <= D[15:0];
    a1 <= {A[23:1],1'b0};					
+	d1 <= D[15:0];
 	uds1 <= UDS;
 	lds1 <= LDS;
 	trig1 <= ~trig1;
 end
 
-
 reg [3:0] cycle = 'd0;
 reg active = 1'b0;
 reg [2:0] type;
 assign idle = cycle == 'd0; // perhaps duplicating active?
-
+/*
 always @( posedge LOAD or negedge VSYNC ) begin
 
 	scrcounter <= scrcounter + 'd2;
@@ -112,7 +120,7 @@ always @( posedge LOAD or negedge VSYNC ) begin
 			lds0 <= 1'b0;
 		end
 	end
-end
+end*/
 
 reg uds_composite = 'd1;
 reg lds_composite = 'd1;
@@ -121,10 +129,11 @@ reg cmode = 1'b1;
 always @(posedge OSC48 ) begin
 	case(cycle)
 		'd0: begin
+			
 			if( trig1 ^ ack1 ) begin
 				cmode <= 1'b1;
-				uds_composite <= uds1;
-				lds_composite <= lds1;
+				uds_composite <= UDS;//uds1;
+				lds_composite <= LDS;//lds1;
 				cycle <= 'd1;
 			end
 			/*
@@ -238,6 +247,7 @@ always @(posedge OSC48 ) begin
 	displaymode <= TP2; // normally displaymode
 end
 
+assign TP3 = address_trigger;
 assign TP4 = VSYNC;
 
 endmodule
