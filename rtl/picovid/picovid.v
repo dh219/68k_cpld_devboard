@@ -86,22 +86,27 @@ always @( posedge OSC48 ) begin
 	LOAD_S <= {LOAD_S[0],LOAD};
 end
 
-reg address_trigger = 1'b0;
-always @( posedge OSC48 ) begin
-//	address_trigger <= ( !RW && !AS && !(UDS&LDS) && LOAD );
-	address_trigger <= ( idle && !RW_S[1] && !AS_S[1] && !(UDS_S[1]&LDS_S[1]) && LOAD_S[1] );
+reg [4:0] address_trigger = 'd0;
+always @( negedge OSC48 ) begin
+	address_trigger <= { address_trigger[3:0], ( idle && !RW_S[1] && !AS_S[1] && !(UDS_S[1]&LDS_S[1]) && LOAD_S[1] ) };
 end
 
-always @( posedge address_trigger ) begin
+always @( posedge address_trigger[0] ) begin
    a1 <= {A[23:1],1'b0};					
 	uds1 <= UDS_S[1];
 	lds1 <= LDS_S[1];
+	//d1 <= D[15:0];
+end
+wire DS = (UDS_S[1]&LDS_S[1]);
+always @( posedge DS ) begin
+	if( !RW ) begin
+		d1 <= D;
+		trig1 <= ~trig1;
+	end
 end
 
-always @( negedge address_trigger ) begin
-	d1 <= D[15:0];
-	trig1 <= ~trig1;
-end
+//always @( negedge address_trigger ) begin
+//end
 
 reg [3:0] cycle = 'd0;
 reg active = 1'b0;
