@@ -71,36 +71,28 @@ reg ack1 = 1'b0;
 reg clkout = 1'b0;
 reg _dtack_in = 1'b1;
 
-
-reg [1:0] AS_S;
-reg [1:0] RW_S;
-reg [1:0] UDS_S;
-reg [1:0] LDS_S;
-reg [1:0] LOAD_S;
-
-always @( posedge OSC48 ) begin
-	AS_S <= {AS_S[0], AS};
-	RW_S <= {RW_S[0], RW};
-	UDS_S <= {UDS_S[0], UDS};
-	LDS_S <= {LDS_S[0], LDS};
-	LOAD_S <= {LOAD_S[0],LOAD};
-end
-
-reg [4:0] address_trigger = 'd0;
-always @( negedge OSC48 ) begin
-	address_trigger <= { address_trigger[3:0], ( idle && !RW_S[1] && !AS_S[1] && !(UDS_S[1]&LDS_S[1]) && LOAD_S[1] ) };
-end
-
-always @( posedge address_trigger[0] ) begin
-   a1 <= {A[23:1],1'b0};					
-	uds1 <= UDS_S[1];
-	lds1 <= LDS_S[1];
+always @( negedge AS ) begin
+   //a1 <= {A[23:1],1'b0};					
 	//d1 <= D[15:0];
 end
-wire DS = (UDS_S[1]&LDS_S[1]);
-always @( posedge DS ) begin
-	if( !RW ) begin
+
+wire DS = (UDS&LDS);
+always @( negedge DS ) begin
+//	if( idle )
+//		d1 <= D;
+end
+
+reg [1:0] DS_D;
+
+// perhaps try to detect repeat transmission?
+
+always @( posedge OSC48 ) begin
+	DS_D <= { DS_D[0], DS };
+	if( !RW && !DS && DS_D[0] && idle) begin
+		a1 <= {A[23:1],1'b0};					
 		d1 <= D;
+		uds1 <= UDS;
+		lds1 <= LDS;
 		trig1 <= ~trig1;
 	end
 end
@@ -112,7 +104,7 @@ reg [3:0] cycle = 'd0;
 reg active = 1'b0;
 reg [2:0] type;
 assign idle = cycle == 'd0; // perhaps duplicating active?
-/*
+
 always @( posedge LOAD or negedge VSYNC ) begin
 
 	scrcounter <= scrcounter + 'd2;
@@ -130,7 +122,7 @@ always @( posedge LOAD or negedge VSYNC ) begin
 			lds0 <= 1'b0;
 		end
 	end
-end*/
+end
 
 reg uds_composite = 'd1;
 reg lds_composite = 'd1;
@@ -139,21 +131,18 @@ reg cmode = 1'b1;
 always @(posedge OSC48 ) begin
 	case(cycle)
 		'd0: begin
-			
 			if( trig1 ^ ack1 ) begin
 				cmode <= 1'b1;
 				uds_composite <= uds1;
 				lds_composite <= lds1;
 				cycle <= 'd1;
 			end
-			/*
-			if( trig0 ^ ack0 ) begin
+/*			if( trig0 ^ ack0 ) begin
 				cmode <= 1'b0;
 				uds_composite <= uds0;
 				lds_composite <= lds0;
 				cycle <= 'd1;
-			end
-			*/
+			end*/
 			clkout <= 1'b0;
 			active <= 1'b0;
 			_dtack_in <= 1'b1;
@@ -257,7 +246,7 @@ always @(posedge OSC48 ) begin
 	displaymode <= TP2; // normally displaymode
 end
 
-assign TP3 = address_trigger;
+assign TP3 = (trig1);
 assign TP4 = VSYNC;
 
 endmodule
