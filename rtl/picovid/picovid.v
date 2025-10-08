@@ -29,9 +29,9 @@ module picovid (
 	input [23:1] A,
 	input [15:0] D,
 	
-	input TP1,
-	input TP2,
-	output TP3,
+	input TP1,	// LOAD
+	input TP2,	// displaymode
+	input TP3, // WDAT
 	output TP4, // VSYNC ORIG
 
 	input OSC48,	// OSC
@@ -62,7 +62,7 @@ reg uds1;
 reg lds1;
 wire idle;
 wire LOAD = TP1;
-
+wire WDAT = TP3;
 
 reg trig0 = 1'b0;
 reg trig1 = 1'b0;
@@ -76,29 +76,13 @@ always @( negedge AS ) begin
 	//d1 <= D[15:0];
 end
 
-wire DS = (UDS&LDS);
-always @( negedge DS ) begin
-//	if( idle )
-//		d1 <= D;
-end
-
-reg [1:0] DS_D;
-
-// perhaps try to detect repeat transmission?
-
-always @( posedge OSC48 ) begin
-	DS_D <= { DS_D[0], DS };
-	if( !RW && !DS && DS_D[0] && idle) begin
+always @( posedge WDAT ) begin
 		a1 <= {A[23:1],1'b0};					
 		d1 <= D;
 		uds1 <= UDS;
 		lds1 <= LDS;
 		trig1 <= ~trig1;
-	end
 end
-
-//always @( negedge address_trigger ) begin
-//end
 
 reg [3:0] cycle = 'd0;
 reg active = 1'b0;
@@ -246,7 +230,6 @@ always @(posedge OSC48 ) begin
 	displaymode <= TP2; // normally displaymode
 end
 
-assign TP3 = (trig1);
 assign TP4 = VSYNC;
 
 endmodule
